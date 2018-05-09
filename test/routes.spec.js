@@ -97,7 +97,6 @@ describe('Food Endpoints', function() {
       return chai.request(server)
       .delete('/api/v1/foods/1')
       .then((response) => {
-        eval(pry.it)
         response.status.should.equal(204);
       })
     })
