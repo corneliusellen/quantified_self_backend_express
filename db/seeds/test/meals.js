@@ -17,12 +17,12 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       return Promise.all([
         knex('foods').insert([
-          {name: 'Quinoa', calories: 10, created_at: new Date},
-          {name: 'Bananas', calories: 50,created_at: new Date}
+          {id: 1, name: 'Quinoa', calories: 10, created_at: new Date},
+          {id: 2, name: 'Bananas', calories: 50,created_at: new Date}
         ])
       ])
     })
     .then(function(){
-    return knex.raw(`ALTER SEQUENCE foods_id_seq RESTART 1`)
+    return knex.raw(`ALTER SEQUENCE foods_id_seq RESTART 3`)
     })
 }

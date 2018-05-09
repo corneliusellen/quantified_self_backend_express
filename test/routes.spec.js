@@ -56,6 +56,43 @@ describe('Food Endpoints', () => {
       })
     })
   })
+
+  describe('POST /api/v1/foods', function() {
+    this.timeout(0);
+    it("creates a new food", () => {
+      return chai.request(server)
+      .post('/api/v1/foods')
+      .send({food: { name: "twinkies", calories: 1000}})
+      .then((response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.should.be.a('object');
+        response.body[0].should.have.property('id');
+        response.body[0].should.have.property('name');
+        response.body[0].should.have.property('calories');
+      })
+    })
+  })
+
+  describe('PATCH /api/v1/foods', function() {
+    this.timeout(0);
+    it("updates a food", () => {
+      return chai.request(server)
+      .patch('/api/v1/foods/1')
+      .send({food: { name: "Mint", calories: 2}})
+      .then((response) => {
+        response.should.have.status(200);
+        response.should.be.json;
+        response.should.be.a('object');
+        response.body[0].should.have.property('id');
+        response.body[0].id.should.equal(1);
+        response.body[0].should.have.property('name');
+        response.body[0].name.should.equal('Mint');
+        response.body[0].should.have.property('calories');
+        response.body[0].calories.should.equal(2);
+      })
+    })
+  })
 })
 
 describe('Meal Endpoints', function(){
@@ -96,7 +133,7 @@ describe('Meal Endpoints', function(){
       })
     })
   })
-  
+
   it('should return 404 if unknown path', function() {
     return chai.request(server)
     .get('/escargot')
