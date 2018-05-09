@@ -6,7 +6,7 @@ const database = require('knex')(configuration)
 
 router.get('/', function(req, res, next) {
   database.raw(
-    'SELECT * FROM meals'
+    'SELECT id, name FROM meals'
   ).then(function(meals) {
     res.json(meals.rows)
   })

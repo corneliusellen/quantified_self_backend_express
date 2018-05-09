@@ -1,13 +1,14 @@
 exports.up = function(knex, Promise) {
-  let createQuery = `CREATE TABLE meals(
+  let createQuery = `CREATE TABLE foods(
     id SERIAL PRIMARY KEY,
     name TEXT,
+    calories INT,
     created_at TIMESTAMP
   )`
   return knex.raw(createQuery)
 };
 
 exports.down = function(knex, Promise) {
- let dropQuery = `DROP TABLE meals`
- return knex.raw(dropQuery)
+  let dropQuery = 'DROP TABLE foods'
+  return knex.raw(dropQuery)
 };
