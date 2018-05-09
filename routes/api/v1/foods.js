@@ -22,4 +22,35 @@ router.get('/:id', function(req, res, next) {
   })
 })
 
+router.post('/', function(req, res, next) {
+  var name = req.body.food.name
+  var calories = req.body.food.calories
+  var created_at = new Date
+  database('foods').insert({
+    name: name,
+    calories: calories,
+    created_at: created_at
+    }).returning('*')
+  .then(function(food) {
+    res.json(food)
+  })
+})
+
+router.patch('/:id', function(req, res, next) {
+  var id = req.params.id
+  var name = req.body.food.name
+  var calories = req.body.food.calories
+  var created_at = new Date
+  database('foods')
+  .where('id', '=', id)
+  .update({
+    name: name,
+    calories: calories,
+    created_at: created_at
+  }).returning('*')
+  .then(function(food) {
+    res.json(food)
+  })
+})
+
 module.exports = router;
