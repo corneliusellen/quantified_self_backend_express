@@ -8,7 +8,8 @@ const configuration = require('../knexfile')[environment]
 const database = require('knex')(configuration)
 pry = require('pryjs')
 
-describe('Food Endpoints', () => {
+describe('Food Endpoints', function() {
+  this.timeout(0);
   before((done) => {
     database.migrate.latest()
     .then(() => done())
@@ -28,7 +29,6 @@ describe('Food Endpoints', () => {
   })
 
   describe('GET /api/v1/foods', function() {
-    this.timeout(0);
     it("returns all foods", () => {
       return chai.request(server)
       .get('/api/v1/foods')
@@ -58,7 +58,6 @@ describe('Food Endpoints', () => {
   })
 
   describe('POST /api/v1/foods', function() {
-    this.timeout(0);
     it("creates a new food", () => {
       return chai.request(server)
       .post('/api/v1/foods')
@@ -75,7 +74,6 @@ describe('Food Endpoints', () => {
   })
 
   describe('PATCH /api/v1/foods', function() {
-    this.timeout(0);
     it("updates a food", () => {
       return chai.request(server)
       .patch('/api/v1/foods/1')
@@ -90,6 +88,17 @@ describe('Food Endpoints', () => {
         response.body[0].name.should.equal('Mint');
         response.body[0].should.have.property('calories');
         response.body[0].calories.should.equal(2);
+      })
+    })
+  })
+
+  describe('DELETE /api/v1/foods/:id', function() {
+    it('deletes a food', () => {
+      return chai.request(server)
+      .delete('/api/v1/foods/1')
+      .then((response) => {
+        eval(pry.it)
+        response.status.should.equal(204);
       })
     })
   })
