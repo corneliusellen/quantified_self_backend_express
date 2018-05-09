@@ -53,4 +53,14 @@ router.patch('/:id', function(req, res, next) {
   })
 })
 
+router.delete('/:id', function(req, res, next) {
+  var id = req.params.id
+  database('foods')
+  .where('id', '=', id)
+  .del()
+  .then(function() {
+    res.send(204)
+  })
+})
+
 module.exports = router;
