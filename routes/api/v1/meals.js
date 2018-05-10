@@ -19,8 +19,8 @@ router.get('/', function(req, res, next) {
   })
 })
 
-router.get('/:id/foods', function(req, res, next) {
-  var id = req.params.id
+router.get('/:meal_id/foods', function(req, res, next) {
+  var id = req.params.meal_id
   database('meals')
   .where('meals.id', '=', id)
   .leftJoin('foodmeals', 'meals.id', '=', 'foodmeals.meal_id')
@@ -31,6 +31,32 @@ router.get('/:id/foods', function(req, res, next) {
   .groupBy('meals.id')
   .then(function (foodmeals) {
     res.json(foodmeals)
+  })
+})
+
+router.post('/:meal_id/foods/:id', function(req, res, next) {
+  var food_id = req.params.id
+  var meal_id = req.params.meal_id
+  database('foodmeals')
+  .insert({
+    food_id: food_id,
+    meal_id: meal_id
+  })
+  .then(function() {
+    return Promise.all([
+    (database('foods')
+    .select('name')
+    .where('id', '=', food_id)),
+    (database('meals')
+    .select('name')
+    .where('id', '=', meal_id))
+    ])
+  })
+  .then(function(info) {
+    var foodName = info[0][0].name
+    var mealName = info[1][0].name
+    var message = `Successfully added ${foodName} to ${mealName}`
+    res.json({ message: message })
   })
 })
 
