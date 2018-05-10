@@ -160,6 +160,18 @@ describe('Meal Endpoints', function(){
     })
   })
 
+  describe('POST /api/v1/meals/:meal_id/foods/:id', function() {
+    this.timeout(0);
+    it('creates a new association between and food and a meal', function() {
+      return chai.request(server)
+      .post('/api/v1/meals/4/foods/3')
+      .then((response) => {
+        response.should.have.status(200);
+        response.body.message.should.equal("Successfully added Chocolate Chips to Dinner")
+      })
+    })
+  })
+
   it('should return 404 if unknown path', function() {
     return chai.request(server)
     .get('/escargot')
