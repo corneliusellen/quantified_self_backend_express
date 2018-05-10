@@ -162,12 +162,24 @@ describe('Meal Endpoints', function(){
 
   describe('POST /api/v1/meals/:meal_id/foods/:id', function() {
     this.timeout(0);
-    it('creates a new association between and food and a meal', function() {
+    it('creates a new association between a food and a meal', function() {
       return chai.request(server)
       .post('/api/v1/meals/4/foods/3')
       .then((response) => {
         response.should.have.status(200);
         response.body.message.should.equal("Successfully added Chocolate Chips to Dinner")
+      })
+    })
+  })
+
+  describe('DELETE /api/v1/meals/:meal_id/foods/:id', function() {
+    this.timeout(0);
+    it('deletes an association between a food and a meal', function() {
+      return chai.request(server)
+      .delete('/api/v1/meals/4/foods/3')
+      .then((response) => {
+        response.should.have.status(200);
+        response.body.message.should.equal("Successfully removed Chocolate Chips from Dinner")
       })
     })
   })
