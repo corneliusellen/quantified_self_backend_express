@@ -60,4 +60,30 @@ router.post('/:meal_id/foods/:id', function(req, res, next) {
   })
 })
 
+router.delete('/:meal_id/foods/:id', function(req, res, next) {
+  var food_id = req.params.id
+  var meal_id = req.params.meal_id
+  database('foodmeals')
+  .where({food_id: food_id,
+    meal_id: meal_id
+  })
+  .del()
+  .then(function() {
+    return Promise.all([
+    (database('foods')
+    .select('name')
+    .where('id', '=', food_id)),
+    (database('meals')
+    .select('name')
+    .where('id', '=', meal_id))
+    ])
+  })
+  .then(function(info) {
+    var foodName = info[0][0].name
+    var mealName = info[1][0].name
+    var message = `Successfully removed ${foodName} from ${mealName}`
+    res.json({ message: message })
+  })
+})
+
 module.exports = router;
