@@ -123,6 +123,7 @@ describe('Meal Endpoints', function(){
   })
 
   describe("GET /api/v1/meals", function() {
+      this.timeout(0);
     it('should return all 4 meals', function() {
       return chai.request(server)
       .get('/api/v1/meals')

@@ -6,10 +6,16 @@ const database = require('knex')(configuration)
 pry = require('pryjs')
 
 router.get('/', function(req, res, next) {
-  database.raw(
-    'SELECT id, name FROM meals'
-  ).then(function(meals) {
-    res.json(meals.rows)
+  database('meals')
+  .leftJoin('foodmeals', 'meals.id', '=', 'foodmeals.meal_id')
+  .leftJoin('foods', 'foodmeals.food_id', '=', 'foods.id')
+  .select(['meals.id',
+          'meals.name',
+          database.raw('JSON_AGG(foods.*) as foods')])
+  .groupBy('meals.id')
+  .orderBy('meals.id')
+  .then(function (foodmeals) {
+    res.json(foodmeals)
   })
 })
 
@@ -19,7 +25,9 @@ router.get('/:id/foods', function(req, res, next) {
   .where('meals.id', '=', id)
   .leftJoin('foodmeals', 'meals.id', '=', 'foodmeals.meal_id')
   .leftJoin('foods', 'foodmeals.food_id', '=', 'foods.id')
-  .select(['meals.id', 'meals.name', database.raw('JSON_AGG(foods.*) as foods')])
+  .select(['meals.id',
+          'meals.name',
+          database.raw('JSON_AGG(foods.*) as foods')])
   .groupBy('meals.id')
   .then(function (foodmeals) {
     res.json(foodmeals)
