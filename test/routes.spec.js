@@ -134,10 +134,27 @@ describe('Meal Endpoints', function(){
         response.body[0].should.have.property('id');
         response.body[0].should.have.property('name');
         response.body[0].should.not.have.property('created_at');
-        response.body[0].name.should.equal("Breakfast");
+        response.body[0].name.should.equal('Breakfast');
       })
-      .catch((error) => {
-        throw error
+      .catch((error) => {throw error})
+    })
+  })
+
+  describe('GET /api/v1/meals/:meal_id/foods', function() {
+      this.timeout(0);
+    it('returns all foods associated with meal', function() {
+      return chai.request(server)
+      .get('/api/v1/meals/1/foods')
+      .then((response) => {
+        response.should.have.status(200);
+        response.body.length.should.equal(1);
+        response.body[0].id.should.equal(1);
+        response.body[0].name.should.equal('Breakfast');
+        response.body[0].should.have.property('foods');
+        response.body[0].foods.length.should.equal(2);
+        response.body[0].foods[0].id.should.equal(1);
+        response.body[0].foods[0].name.should.equal('Quinoa');
+        response.body[0].foods[0].calories.should.equal(10);
       })
     })
   })
