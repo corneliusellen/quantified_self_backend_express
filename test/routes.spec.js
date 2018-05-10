@@ -36,7 +36,7 @@ describe('Food Endpoints', function() {
         response.should.have.status(200);
         response.should.be.json;
         response.should.be.a('object');
-        response.body.length.should.equal(2)
+        response.body.length.should.equal(3)
         response.body[0].should.have.property('name')
       })
     })
